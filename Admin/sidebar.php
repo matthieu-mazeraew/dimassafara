@@ -121,7 +121,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../bobot/bobot.php" class="nav-link">
+                <a href="../nilai_kriteria/nilai_kriteria_mahasiswa.php" class="nav-link">
                   <i class="fas fa-clipboard nav-icon"></i>
                   <p>nilai kriteria mahasiswa</p>
                 </a>
