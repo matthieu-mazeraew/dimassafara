@@ -6,6 +6,7 @@
 <body>
   <?php
       include "../sidebar.php";
+      include "../koneksi.php";
   ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -61,25 +62,19 @@
                   </thead>
                   <tbody>
                   <?php
-                  		$no = 1;
-                        include "../koneksi.php";
-                        $data = mysqli_query($koneksi, "select * from mahasiswa");
-                        while ($row=mysqli_fetch_array($data))
+					$i=0;
+					$a=mysqli_query($koneksi, "select * from mahasiswa order by nim asc");
+					 
+					while($da=mysql_fetch_assoc($a)){
+						echo "<tr>
+							<td>".(++$i)."</td>
+							<td>".$da['nama_pendaftar']."</td>";
+						echo "</tr>\n";
 
-                            {
-                    ?>
-                  <tr>
-                      <td><?php echo $no++;?></td>
-                        <td>
-                      <?php echo $row['nim']; ?>
-                          </td>
-                          <td>
-                      <?php echo $row['nama_pendaftar']; ?>
-                          </td>
+					}
+
+					?>
                     </tr>
-                      <?php
-                    }
-                  ?>
 
                   </tbody>
 
