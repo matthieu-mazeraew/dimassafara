@@ -61,15 +61,24 @@
 
                   </thead>
                   <tbody>
-                  <?php
-					$i=0;
-					$a=mysqli_query($koneksi, "select * from mahasiswa order by nim asc");
-					 
-					while($da=mysql_fetch_assoc($a)){
+					<?php
+					$i=1;
+					$a=mysqli_query($koneksi, "select * from mahasiswa order by nim asc;");
+			 
+					while($da=mysqli_fetch_assoc($a)){
 						echo "<tr>
 							<td>".(++$i)."</td>
+							<td>".$da['nim']."</td>
 							<td>".$da['nama_pendaftar']."</td>";
-						echo "</tr>\n";
+							$idalt=$da['nim'];
+							//ambil nilai
+								$n=mysqli_query($koneksi, "select * from nilai where nim='$idalt' order by kd_nilai asc");
+								
+							while($dn=mysqli_fetch_assoc($n)){
+							
+								echo "<td align='center'>$dn[nilai]</td>";
+							}
+							echo "</tr>\n";
 
 					}
 
