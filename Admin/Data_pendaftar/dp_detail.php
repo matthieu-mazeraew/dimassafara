@@ -67,6 +67,9 @@
                   <li class="list-group-item">
                     <b>Jurusan</b> <a class="float-right text-secondary"><td><?php echo $row['jurusan']; ?></td></a>
                   </li>
+                   <li class="list-group-item">
+                    <b>Semester</b> <a class="float-right text-secondary"><td><?php echo $row['semester']; ?></td></a>
+                  </li>
                 </ul>
                  <a href="datapendaftar.php" class="btn btn-dark btn-block"><b>kembali</b></a>
               </div>

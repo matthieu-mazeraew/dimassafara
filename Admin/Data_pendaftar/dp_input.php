@@ -13,7 +13,7 @@ $tanggungan_ortu = $_POST['tanggungan_ortu'];
 $penghasilan_ortu = $_POST['penghasilan_ortu'];
 $foto = $_POST['foto'];
 
-$query = "insert INTO tb_datapendaftar VALUES ('$nim',' $nama_pendaftar', '$jurusan', '$prodi', '$semester', '$ipk', '$prestasi_non_aka', '$keikutsertaan_ormawa', '$tanggungan_ortu', '$penghasilan_ortu', '$foto')";
+$query = "insert INTO mahasiswa VALUES ('$nim',' $nama_pendaftar', '$jurusan', '$prodi', '$semester', '$ipk', '$prestasi_non_aka', '$keikutsertaan_ormawa', '$tanggungan_ortu', '$penghasilan_ortu', '$foto')";
 
 mysqli_query($koneksi, $query)
 or die ("Gagal Perintah SQL".mysql_error());

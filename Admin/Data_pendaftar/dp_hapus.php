@@ -2,7 +2,7 @@
 include"../koneksi.php";
 
 
-$query = "DELETE FROM tb_datapendaftar 
+$query = "DELETE FROM mahasiswa 
 							WHERE nim ='$_GET[nim]'
 								";
 
