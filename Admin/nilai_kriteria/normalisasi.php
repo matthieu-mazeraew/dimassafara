@@ -6,7 +6,6 @@
 <body>
   <?php
       include "../sidebar.php";
-      include "../koneksi.php";
   ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -24,7 +23,7 @@
 
     <!-- Main content -->
     <section class="content">
-      <h1>Data Pendaftar</h1>
+      <h1>Nilai Kriteria mahasiswa</h1>
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
@@ -40,51 +39,28 @@
 
                   <thead>
                   <tr>
-                  	<?php
-					include "../koneksi.php";
-					$data =mysqli_query($koneksi, "select * from kriteria");
-					$row=mysqli_num_rows($data);
-
-					?>
-                    <th rowspan="2">No.</th>
-                    <th rowspan="2">nim</th>
-                    <th rowspan="2">Nama Pendaftar</th>
-                    <th colspan="<?php echo $row; ?>">Kriteria</th>	
+                    <th>Kriteria</th>
+                    <th>sifat</th>
+                    <th>bobot</th>
+                    <th>Normalisasi</th>
                   </tr>
-                  <tr>
-					<?php
-					for($n=1;$n<=$row;$n++){
-						echo"<th>C{$n}</th>";
-					}
-					?>
-				  </tr>
-
                   </thead>
                   <tbody>
-					<?php
-					$i=0;
-					$a=mysqli_query($koneksi, "select * from mahasiswa order by nim asc;");
-			 
-					while($da=mysqli_fetch_assoc($a)){
-						echo "<tr>
-							<td>".(++$i)."</td>
-							<td>".$da['nim']."</td>
-							<td>".$da['nama_pendaftar']."</td>";
-							$idalt=$da['nim'];
-							//ambil nilai
-								$n=mysqli_query($koneksi, "select * from nilai where nim='$idalt' order by kd_nilai asc");
-								
-							while($dn=mysqli_fetch_assoc($n)){
-							
-								echo "<td align='center'>$dn[nilai]</td>";
-							}
-							echo "</tr>\n";
-
-					}
-
-					?>
-                    </tr>
-
+                  <?php  
+                  include "../koneksi.php";?>
+                      <?php if ($query = $koneksi->query("SELECT nilai.kd_kriteria, kriteria.sifat, kriteria.bobot, ROUND(IF(kriteria.sifat='max', MAX(nilai.nilai), MIN(nilai.nilai)), 1) AS normalization FROM nilai 
+                        JOIN kriteria USING(kd_kriteria) GROUP BY nilai.kd_kriteria")): ?>
+                          <?php while($row = $query->fetch_assoc()): ?>
+                          <tr>
+                              <td><?=$row['kd_kriteria']?></td>
+                              <td><?=$row['sifat']?></td>
+                              <td><?=$row['bobot']?></td>
+                              <td><?=$row['normalization']?></td>
+                           </td>
+                          </td>
+                  </tr>
+                  <?php endwhile ?>
+                  <?php endif ?>
                   </tbody>
 
                 </table>
