@@ -127,7 +127,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../bobot/bobot.php" class="nav-link">
+                <a href="../nilai_kriteria/hasil.php" class="nav-link">
                   <i class="far fa-sticky-note nav-icon"></i>
                   <p>hasil</p>
                 </a>
@@ -185,7 +185,7 @@
       "paging": true,
       "lengthChange": false,
       "searching": false,
-      "ordering": true,
+      "ordering": false,
       "info": true,
       "autoWidth": false,
       "responsive": true,

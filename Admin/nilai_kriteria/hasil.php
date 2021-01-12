@@ -48,15 +48,15 @@
                   <?php  
                   include "../koneksi.php";?>
                       <?php if ($query = $koneksi->query("SELECT (SELECT nama_pendaftar FROM mahasiswa WHERE nim=mhs.nim) AS nama,
-                      (SELECT nim FROM mahasiswa WHERE nim=mhs.nim) AS nim,
-                      SUM( IF( c.sifat = 'max', nilai.nilai / c.normalization, c.normalization / nilai.nilai ) * c.bobot ) AS rangking 
-                      FROM nilai 
-                      JOIN mahasiswa mhs USING(nim) 
-                      JOIN ( SELECT nilai.kd_kriteria, kriteria.sifat, kriteria.bobot, 
-                      ROUND(IF(kriteria.sifat='max', MAX(nilai.nilai), MIN(nilai.nilai)), 1) AS normalization 
-                      FROM nilai JOIN kriteria USING(kd_kriteria) 
-                      GROUP BY nilai.kd_kriteria ) c USING(kd_kriteria) 
-                      GROUP BY nilai.nim ORDER BY rangking DESC")): ?>
+                                  (SELECT nim FROM mahasiswa WHERE nim=mhs.nim) AS nim,
+                                    SUM( IF( c.sifat = 'max', nilai.nilai / c.normalization, c.normalization / nilai.nilai ) * c.bobot ) AS rangking
+                                    FROM nilai 
+                                    JOIN mahasiswa mhs USING(nim) 
+                                    JOIN ( SELECT nilai.kd_kriteria, kriteria.sifat, kriteria.bobot, 
+                                          ROUND(IF(kriteria.sifat='max', MAX(nilai.nilai), MIN(nilai.nilai)), 1) AS normalization 
+                                    FROM nilai JOIN kriteria USING(kd_kriteria) 
+                                    GROUP BY nilai.kd_kriteria ) c USING (kd_kriteria) 
+                                    GROUP BY nilai.nim ORDER BY rangking DESC")): ?>
                           <?php while($row = $query->fetch_assoc()): ?>
                           <tr>
                               <td><?=$row['nama']?></td>

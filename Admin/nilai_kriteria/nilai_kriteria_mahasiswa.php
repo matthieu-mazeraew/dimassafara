@@ -6,6 +6,7 @@
 <body>
   <?php
       include "../sidebar.php";
+      include "../koneksi.php";
   ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -23,7 +24,7 @@
 
     <!-- Main content -->
     <section class="content">
-      <h1>Nilai Kriteria mahasiswa</h1>
+      <h1>Data Pendaftar</h1>
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
@@ -39,33 +40,51 @@
 
                   <thead>
                   <tr>
-                    <th>No.</th>
-                    <th>nim</th>
-                    <th>Nama Pendaftar</th>
-                    <th>Kriteria</th>
-                    <th>Nilai</th>
-                    <th> </th>
+                    <?php
+          include "../koneksi.php";
+          $data =mysqli_query($koneksi, "select * from kriteria");
+          $row=mysqli_num_rows($data);
+
+          ?>
+                    <th rowspan="2">No.</th>
+                    <th rowspan="2">nim</th>
+                    <th rowspan="2">Nama Pendaftar</th>
+                    <th colspan="<?php echo $row; ?>">Kriteria</th> 
                   </tr>
+                  <tr>
+          <?php
+          for($n=1;$n<=$row;$n++){
+            echo"<th>C{$n}</th>";
+          }
+          ?>
+          </tr>
+
                   </thead>
                   <tbody>
-                  <?php $no = 1; 
-                  include "../koneksi.php";?>
-                      <?php if ($query = $koneksi->query("SELECT a.kd_nilai, b.nama AS nama_kriteria, c.nim, c.nama_pendaftar AS nama_pendaftar, a.nilai FROM nilai a JOIN kriteria b ON a.kd_kriteria=b.kd_kriteria JOIN mahasiswa c ON c.nim=a.nim")): ?>
-                          <?php while($row = $query->fetch_assoc()): ?>
-                          <tr>
-                              <td><?=$no++?></td>
-                              <td><?=$row['nim']?></td>
-                              <td><?=$row['nama_pendaftar']?></td>
-                              <td><?=$row['nama_kriteria']?></td>
-                              <td><?=$row['nilai']?></td>
-                              <td>
-                             <a href='dp_detail.php?nim=<?php echo $row['nim'];  ?>' class="btn btn-primary btn-flat btn-xs"><i class="fa fa-pencil"></i></a>
-                             <a href='dp_hapus.php?nim=<?php echo $row['nim'];  ?>' class="btn btn-danger btn-flat btn-xs" ><i class="fa fa-trash"></a></td>
-                           </td>
-                          </td>
-                  </tr>
-                  <?php endwhile ?>
-                  <?php endif ?>
+          <?php
+          $i=0;
+          $a=mysqli_query($koneksi, "select * from mahasiswa order by nim asc;");
+       
+          while($da=mysqli_fetch_assoc($a)){
+            echo "<tr>
+              <td>".(++$i)."</td>
+              <td>".$da['nim']."</td>
+              <td>".$da['nama_pendaftar']."</td>";
+              $idalt=$da['nim'];
+              //ambil nilai
+                $n=mysqli_query($koneksi, "select * from nilai where nim='$idalt' order by kd_nilai asc");
+                
+              while($dn=mysqli_fetch_assoc($n)){
+              
+                echo "<td align='center'>$dn[nilai]</td>";
+              }
+              echo "</tr>\n";
+
+          }
+
+          ?>
+                    </tr>
+
                   </tbody>
 
                 </table>
