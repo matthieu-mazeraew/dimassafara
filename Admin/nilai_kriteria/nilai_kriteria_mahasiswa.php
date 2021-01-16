@@ -1,3 +1,51 @@
+<?php
+
+include "../koneksi.php";
+
+$update = (isset($_GET['action']) AND $_GET['action'] == 'update') ? true : false;
+if ($update) {
+  $sql = $koneksi->query("SELECT * FROM nilai JOIN penilaian USING(kd_kriteria) WHERE kd_nilai='$_GET[key]'");
+  $row = $sql->fetch_assoc();
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" AND isset($_POST["save"])) {
+  $validasi = false; $err = false;
+  if ($update) {
+    $sql = "UPDATE nilai SET kd_kriteria='$_POST[kd_kriteria]', nim='$_POST[nim]', nilai='$_POST[nilai]' WHERE kd_nilai='$_GET[key]'";
+  } else {
+    $query = "INSERT INTO nilai VALUES ";
+    foreach ($_POST["nilai"] as $kd_kriteria => $nilai) {
+      $query .= "(NULL, '$kd_kriteria', '$_POST[nim]', '$nilai'),";
+    }
+    $sql = rtrim($query, ',');
+    $validasi = true;
+  }
+
+  if ($validasi) {
+    foreach ($_POST["nilai"] as $kd_kriteria => $nilai) {
+      $q = $koneksi->query("SELECT kd_nilai FROM nilai WHERE kd_kriteria=$kd_kriteria AND nim=$_POST[nim] AND nilai LIKE '%$nilai%'");
+      if ($q->num_rows) {
+        echo alert("Nilai untuk ".$_POST["nim"]." sudah ada!", "?page=nilai");
+        $err = true;
+      }
+    }
+  }
+
+  if (!$err AND $koneksi->query($sql)) {
+    echo alert("Berhasil!");
+  } else {
+    echo alert("Gagal!");
+  }
+}
+
+if (isset($_GET['action']) AND $_GET['action'] == 'delete') {
+  $koneksi->query("DELETE FROM nilai WHERE kd_nilai='$_GET[key]'");
+  echo alert("Berhasil!", "?page=nilai");
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,7 +82,7 @@
 
               <div class="card-body">
                 <div class="box-tools pull-left">
-                <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#tambahuser"><i class="fa fa-male"></i> Tambah Pendaftar</a>
+                <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#tambahuser"><i class="fa fa-male"></i> Tambah</a>
                 </div>
                 <table id="example1" class="table table-bordered table-striped">
 
@@ -86,6 +134,60 @@
                     </tr>
 
                   </tbody>
+
+                  <div class="example-modal">
+                          <div id="tambahuser" class="modal fade bd-example-modal-sm" role="dialog" style="display:none;">
+                            <div class="modal-dialog modal-lg"> 
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                  <h3 class="modal-title">Tambah Data Kriteria</h3>
+                                </div>
+                                <div class="modal-body">
+                                  <form action="<?=$_SERVER["REQUEST_URI"]?>" method="post">
+                                    <div class="form-group">
+                                      <label for="nim">Mahasiswa</label>
+                                      <?php if ($_POST): ?>
+                                        <input type="text" name="nim" value="<?=$_POST["nim"]?>" class="form-control" readonly="on">
+                                      <?php else: ?>
+                                        <select class="form-control" name="nim">
+                                          <option>---</option>
+                                          <?php $sql = $koneksi->query("SELECT * FROM mahasiswa"); while ($data = $sql->fetch_assoc()): ?>
+                                            <option value="<?=$data["nim"]?>" <?= (!$update) ? "" : (($row["nim"] != $data["nim"]) ? "" : 'selected="selected"') ?>><?=$data["nim"]?> | <?=$data["nama_pendaftar"]?></option>
+                                          <?php endwhile; ?>
+                                        </select>
+                                      <?php endif; ?>
+                                    </div>
+                                    <?php if ($_POST): ?>
+                                      <?php $q = $koneksi->query("SELECT * FROM kriteria"); while ($r = $q->fetch_assoc()): ?>
+                                          <div class="form-group">
+                                              <label for="nilai"><?=ucfirst($r["nama"])?></label>
+                                              <select class="form-control" name="nilai[<?=$r["kd_kriteria"]?>]" id="nilai">
+                                                <option>---</option>
+                                                <?php $sql = $koneksi->query("SELECT * FROM penilaian WHERE kd_kriteria=$r[kd_kriteria]"); while ($data = $sql->fetch_assoc()): ?>
+                                                  <option value="<?=$data["bobot"]?>" class="<?=$data["kd_kriteria"]?>"<?= (!$update) ? "" : (($row["kd_penilaian"] != $data["kd_penilaian"]) ? "" : ' selected="selected"') ?>><?=$data["keterangan"]?></option>
+                                                <?php endwhile; ?>
+                                              </select>
+                                          </div>
+                                      <?php endwhile; ?>
+                                      <input type="hidden" name="save" value="true">
+                                    <?php endif; ?>
+                                    <button type="submit" id="simpan" class="btn btn-<?= ($update) ? "warning" : "info" ?> btn-block"><?=($_POST) ? "Simpan" : "Tampilkan Kriteria"?></button>
+                                    <?php if ($update): ?>
+                                      <a href="?page=nilai" class="btn btn-info btn-block">Batal</a>
+                                    <?php endif; ?>
+                                    </div>
+                                  </div>
+                                    <!--<div class="box-footer">
+                                      <a href="../user/data_user.php" class="btn btn-danger"><i class="fa fa-close"></i> Batal</a>
+                                      <input type="submit" name="submit" class="btn btn-primary" value="Simpan">
+                                    </div> /.box-footer -->
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div><!-- modal insert close -->
 
                 </table>
 
