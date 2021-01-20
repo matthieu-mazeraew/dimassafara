@@ -68,8 +68,8 @@
                       <?php echo $row['bobot']; ?>
                           </td>
                           <td>
-                             <a href='dp_detail.php?nim=<?php echo $row['nim'];  ?>' class="btn btn-primary btn-flat btn-xs"><i class="fa fa-pencil"></i></a>
-                             <a href='dp_hapus.php?nim=<?php echo $row['nim'];  ?>' class="btn btn-danger btn-flat btn-xs" ><i class="fa fa-trash"></a></td>
+                             <a href='dp_detail.php?nim=<?php echo $row['kd_kriteria'];  ?>' class="btn btn-primary btn-flat btn-xs"><i class="fa fa-pencil"></i></a>
+                             <a href='hapus.php?kd_kriteria=<?php echo $row['kd_kriteria'];  ?>' class="btn btn-danger btn-flat btn-xs" ><i class="fa fa-trash"></a></td>
                            </td>
                           </td>
                   </tr>
@@ -87,7 +87,7 @@
                                   <h3 class="modal-title">Tambah Data Kriteria</h3>
                                 </div>
                                 <div class="modal-body">
-                                  <form action="input.php" method="post" role="form">
+                                  <form action="kriteria_input.php" method="post" role="form">
                                     <div class="form-group">
                                       <div class="row">
                                       <label class="col-sm-3 control-label text-right">Nama <span class="text-red">*</span></label>         
@@ -96,17 +96,22 @@
                                     </div>
                                     <div class="form-group">
                                       <div class="row">
-                                      <label class="col-sm-3 control-label text-right">Sifat <span class="text-red">*</span></label>
-                                      <div class="col-sm-8"><input type="text" class="form-control" name="sifat" placeholder="nama_pendaftar" value=""></div>
+                                      <label class="col-sm-3 control-label text-right">sifat<span class="text-red">*</span></label>
+                                        <div class="col-sm-8"><select name="sifat" class="form-control select2" style="width: 100%;">
+                                          <option value="User" selected="selected">-- Pilih Satu --</option>
+                                          <option value="benefit">benefit</option>
+                                          <option value="cost">cost</option>
+                                        </select>
+                                        </div>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <div class="row">
                                       <label class="col-sm-3 control-label text-right">bobot <span class="text-red">*</span></label>
-                                      <div class="col-sm-8"><input type="text" class="form-control" name="jurusan" placeholder="jurusan" value="">
+                                      <div class="col-sm-8"><input type="text" class="form-control" name="bobot" placeholder="jurusan" value="">
                                       </div>
                                       </div>
-                                    </div>
+                                    </div> 
                                     </div>
                                     <div class="form-group">
                                     <div class="modal-footer">
