@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>AdminLTE 3 | DataTables</title>
+  <title>Beasiswa IOM</title>
 </head>
 <body>
   <?php
@@ -34,9 +34,9 @@
                 <div class="box-tools pull-left">
                 <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#tambahuser"><i class="fa fa-male"></i> Tambah Pegawai</a>
                 </div>
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="example1" class="table table-bordered">
 
-                  <thead>
+                  <thead class="bg bg-secondary">
                   <tr>
                     <th>No.</th>
                     <th>NIP/NPAK</th>

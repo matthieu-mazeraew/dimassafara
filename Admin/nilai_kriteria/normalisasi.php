@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>AdminLTE 3 | DataTables</title>
+  <title>Beasiswa IOM</title>
 </head>
 <body>
   <?php

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>AdminLTE 3 | DataTables</title>
+ <title>AdminLTE 3 | DataTables</title>
 </head>
 <body>
   <?php
@@ -35,9 +35,9 @@
                 <div class="box-tools pull-left">
                 <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#tambahuser"><i class="fa fa-male"></i> Tambah Pendaftar</a>
                 </div>
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="example1" class="table table-bordered">
 
-                  <thead>
+                  <thead class="bg bg-secondary">
                   <tr>
                     <th>No.</th>
                     <th>nim</th>
@@ -85,26 +85,6 @@
                   ?>
                   </tbody>
 
-                   <!-- modal delete -->
-                      <div class="example-modal">
-                        <div id="deleteuser<?php echo $no; ?>" class="modal fade" role="dialog" style="display:none;">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h3 class="modal-title">Konfirmasi Delete Data User</h3>
-                              </div>
-                              <div class="modal-body">
-                                <h4 align="center" >Apakah anda yakin ingin menghapus Pendaftar berikut <?php echo $row['nim'];?><strong><span class="grt"></span></strong> ?</h4>
-                              </div>
-                              <div class="modal-footer">
-                                <button id="nodelete" type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancle</button>
-                                <a href="dp_hapus.php?nim=<?php echo $row['nim']; ?>" class="btn btn-primary">Delete</a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div><!-- modal delete -->
                   
                          <!-- modal insert -->
                         <div class="example-modal">

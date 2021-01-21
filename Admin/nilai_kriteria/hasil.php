@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>AdminLTE 3 | DataTables</title>
+  <title>Beasiswa IOM</title>
 </head>
 <body>
   <?php
@@ -23,7 +23,7 @@
 
     <!-- Main content -->
     <section class="content">
-      <h1>Nilai Kriteria mahasiswa</h1>
+      <h1>Hasil</h1>
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
@@ -33,40 +33,45 @@
 
               <div class="card-body">
                 <div class="box-tools pull-left">
-                <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#tambahuser"><i class="fa fa-male"></i> Tambah Pendaftar</a>
                 </div>
                 <table id="example1" class="table table-bordered table-striped">
 
                   <thead>
-                  <tr>
+                  <tr style="vertical-align : middle;text-align:center;">
+                    <th>no</th>
                     <th>Nama</th>
                     <th>nim</th>
+                    <th>prodi</th>
                     <th>rangking</th>
                   </tr>
                   </thead>
                   <tbody>
-                  <?php  
-                  include "../koneksi.php";?>
-                      <?php if ($query = $koneksi->query("SELECT (SELECT nama_pendaftar FROM mahasiswa WHERE nim=mhs.nim) AS nama,
-                                  (SELECT nim FROM mahasiswa WHERE nim=mhs.nim) AS nim,
-                                    SUM( IF( c.sifat = 'benefit', nilai.nilai / c.normalization, c.normalization / nilai.nilai ) * c.bobot ) AS rangking
-                                    FROM nilai 
-                                    JOIN mahasiswa mhs USING(nim) 
-                                    JOIN ( SELECT nilai.kd_kriteria, kriteria.sifat, kriteria.bobot, 
-                                          ROUND(IF(kriteria.sifat='benefit', MAX(nilai.nilai), MIN(nilai.nilai)), 1) AS normalization 
-                                    FROM nilai JOIN kriteria USING(kd_kriteria) 
-                                    GROUP BY nilai.kd_kriteria ) c USING (kd_kriteria) 
-                                    GROUP BY nilai.nim ORDER BY rangking DESC")): ?>
-                          <?php while($row = $query->fetch_assoc()): ?>
-                          <tr>
-                              <td><?=$row['nama']?></td>
-                              <td><?=$row['nim']?></td>
-                              <td><?=$row['rangking']?></td>
-                           </td>
+                  <?php
+                  $no = 1;
+                        include "../koneksi.php";
+                        $data = mysqli_query($koneksi, "select * from nilai_akhir");
+                        while ($row=mysqli_fetch_array($data))
+
+                            {
+                    ?>
+                  <tr>
+                      <td><?php echo $no++;?></td>
+                        <td>
+                      <?php echo $row['nama']; ?>
+                          </td>
+                          <td>
+                      <?php echo $row['nim']; ?>
+                          </td>
+                          <td>
+                      <?php echo $row['prodi']; ?>
+                          </td>
+                           <td>
+                      <?php echo $row['rangking']; ?>
                           </td>
                   </tr>
-                  <?php endwhile ?>
-                  <?php endif ?>
+                  <?php
+                    }
+                  ?>
                   </tbody>
 
                 </table>

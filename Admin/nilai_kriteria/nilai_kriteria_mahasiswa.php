@@ -49,7 +49,7 @@ if (isset($_GET['action']) AND $_GET['action'] == 'delete') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>AdminLTE 3 | DataTables</title>
+  <title>Beasiswa IOM</title>
 </head>
 <body>
   <?php
@@ -72,21 +72,66 @@ if (isset($_GET['action']) AND $_GET['action'] == 'delete') {
 
     <!-- Main content -->
     <section class="content">
-      <h1>Data Pendaftar</h1>
+
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
-            <div class="card">
 
+            <div class="card" style="width: 650px; margin: 0 auto">
+
+            <form action="<?=$_SERVER["REQUEST_URI"]?>" method="post">
+                  <div class="form-group">
+                    <h3>Tambah Data</h3>
+                    <label for="nim">Mahasiswa</label>
+                      <?php if ($_POST): ?>
+                        <input type="text" name="nim" value="<?=$_POST["nim"]?>" class="form-control" readonly="on">
+                        <?php else: ?>
+                        <select class="form-control" name="nim">
+                         <?php $sql = $koneksi->query("SELECT * FROM mahasiswa"); while ($data = $sql->fetch_assoc()): ?>
+                         <option value="<?=$data["nim"]?>" <?= (!$update) ? "" : (($row["nim"] != $data["nim"]) ? "" : 'selected="selected"') ?>><?=$data["nim"]?> | <?=$data["nama_pendaftar"]?></option>
+                         <?php endwhile; ?>
+                        </select>
+                      <?php endif; ?>
+                    </div>
+                       <?php if ($_POST): ?>
+                       <?php $q = $koneksi->query("SELECT * FROM kriteria"); while ($r = $q->fetch_assoc()): ?>
+                       <div class="form-group">
+                         <label for="nilai"><?=ucfirst($r["nama"])?></label>
+                         <select class="form-control" name="nilai[<?=$r["kd_kriteria"]?>]" id="nilai">
+                           <option>---</option>
+                             <?php $sql = $koneksi->query("SELECT * FROM penilaian WHERE kd_kriteria=$r[kd_kriteria]"); while ($data = $sql->fetch_assoc()): ?>
+                               <option value="<?=$data["bobot"]?>" class="<?=$data["kd_kriteria"]?>"<?= (!$update) ? "" : (($row["kd_penilaian"] != $data["kd_penilaian"]) ? "" : ' selected="selected"') ?>><?=$data["keterangan"]?></option>
+                             <?php endwhile; ?>
+                         </select>
+                        </div>
+                        <?php endwhile; ?>
+                        <input type="hidden" name="save" value="true">
+                        <?php endif; ?>
+                        <button type="submit" id="simpan" class="btn btn-<?= ($update) ? "warning" : "info" ?> btn-block"><?=($_POST) ? "Simpan" : "Tampilkan Kriteria"?></button>
+                         <?php if ($update): ?>
+                           <a href="?page=nilai" class="btn btn-info btn-block">Batal</a>
+                           <?php endif; ?>
+                          </div>
+                        </div>
+                         <!--<div class="box-footer">
+                         <a href="../user/data_user.php" class="btn btn-danger"><i class="fa fa-close"></i> Batal</a>
+                         <input type="submit" name="submit" class="btn btn-primary" value="Simpan">
+                            </div> /.box-footer -->
+                      </form>
+            </div>
+
+            <h1></h1>
+
+            <div class="card">
               <!-- /.card-header -->
 
               <div class="card-body">
                 <div class="box-tools pull-left">
                 <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#tambahuser"><i class="fa fa-male"></i> Tambah</a>
                 </div>
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="example1" class="table table-bordered">
 
-                  <thead>
+                  <thead class="text text-justify">
                   <tr>
                     <?php
           include "../koneksi.php";
@@ -94,12 +139,12 @@ if (isset($_GET['action']) AND $_GET['action'] == 'delete') {
           $row=mysqli_num_rows($data);
 
           ?>
-                    <th rowspan="2">No.</th>
-                    <th rowspan="2">nim</th>
-                    <th rowspan="2">Nama Pendaftar</th>
-                    <th colspan="<?php echo $row; ?>">Kriteria</th> 
+                    <th rowspan="2" style="vertical-align : middle;text-align:center;">No.</th>
+                    <th rowspan="2" style="vertical-align : middle;text-align:center;">nim</th>
+                    <th rowspan="2" style="vertical-align : middle;text-align:center;">Nama Pendaftar</th>
+                    <th colspan="<?php echo $row; ?>" style="vertical-align : middle;text-align:center;">Kriteria</th> 
                   </tr>
-                  <tr>
+                  <tr style="vertical-align : middle;text-align:center;" class="bg bg-secondary">
           <?php
           for($n=1;$n<=$row;$n++){
             echo"<th>C{$n}</th>";
@@ -134,60 +179,6 @@ if (isset($_GET['action']) AND $_GET['action'] == 'delete') {
                     </tr>
 
                   </tbody>
-
-                  <div class="example-modal">
-                          <div id="tambahuser" class="modal fade bd-example-modal-sm" role="dialog" style="display:none;">
-                            <div class="modal-dialog modal-lg"> 
-                              <div class="modal-content">
-                                <div class="modal-header">
-                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                  <h3 class="modal-title">Tambah Data Kriteria</h3>
-                                </div>
-                                <div class="modal-body">
-                                  <form action="<?=$_SERVER["REQUEST_URI"]?>" method="post">
-                                    <div class="form-group">
-                                      <label for="nim">Mahasiswa</label>
-                                      <?php if ($_POST): ?>
-                                        <input type="text" name="nim" value="<?=$_POST["nim"]?>" class="form-control" readonly="on">
-                                      <?php else: ?>
-                                        <select class="form-control" name="nim">
-                                          <option>---</option>
-                                          <?php $sql = $koneksi->query("SELECT * FROM mahasiswa"); while ($data = $sql->fetch_assoc()): ?>
-                                            <option value="<?=$data["nim"]?>" <?= (!$update) ? "" : (($row["nim"] != $data["nim"]) ? "" : 'selected="selected"') ?>><?=$data["nim"]?> | <?=$data["nama_pendaftar"]?></option>
-                                          <?php endwhile; ?>
-                                        </select>
-                                      <?php endif; ?>
-                                    </div>
-                                    <?php if ($_POST): ?>
-                                      <?php $q = $koneksi->query("SELECT * FROM kriteria"); while ($r = $q->fetch_assoc()): ?>
-                                          <div class="form-group">
-                                              <label for="nilai"><?=ucfirst($r["nama"])?></label>
-                                              <select class="form-control" name="nilai[<?=$r["kd_kriteria"]?>]" id="nilai">
-                                                <option>---</option>
-                                                <?php $sql = $koneksi->query("SELECT * FROM penilaian WHERE kd_kriteria=$r[kd_kriteria]"); while ($data = $sql->fetch_assoc()): ?>
-                                                  <option value="<?=$data["bobot"]?>" class="<?=$data["kd_kriteria"]?>"<?= (!$update) ? "" : (($row["kd_penilaian"] != $data["kd_penilaian"]) ? "" : ' selected="selected"') ?>><?=$data["keterangan"]?></option>
-                                                <?php endwhile; ?>
-                                              </select>
-                                          </div>
-                                      <?php endwhile; ?>
-                                      <input type="hidden" name="save" value="true">
-                                    <?php endif; ?>
-                                    <button type="submit" id="simpan" class="btn btn-<?= ($update) ? "warning" : "info" ?> btn-block"><?=($_POST) ? "Simpan" : "Tampilkan Kriteria"?></button>
-                                    <?php if ($update): ?>
-                                      <a href="?page=nilai" class="btn btn-info btn-block">Batal</a>
-                                    <?php endif; ?>
-                                    </div>
-                                  </div>
-                                    <!--<div class="box-footer">
-                                      <a href="../user/data_user.php" class="btn btn-danger"><i class="fa fa-close"></i> Batal</a>
-                                      <input type="submit" name="submit" class="btn btn-primary" value="Simpan">
-                                    </div> /.box-footer -->
-                                  </form>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div><!-- modal insert close -->
 
                 </table>
 
